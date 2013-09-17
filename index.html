@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Large Data and R</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Large Data and R">
+  <meta name="author" content="Miguel Vazquez-Prada, September 2013.">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow_mig.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="libraries/widgets/bootstrap/css/bootstrap.css"></link>
+<link rel=stylesheet href="libraries/widgets/interactive/css/aceeditor.css"></link>
+<link rel=stylesheet href="libraries/widgets/nvd3/css/nv.d3.css"></link>
+<link rel=stylesheet href="libraries/widgets/nvd3/css/rNVD3.css"></link>
+<link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  <script src="libraries/widgets/nvd3/js/jquery-1.8.2.min.js"></script>
+<script src="libraries/widgets/nvd3/js/d3.v3.min.js"></script>
+<script src="libraries/widgets/nvd3/js/nv.d3.min-new.js"></script>
+<script src="libraries/widgets/nvd3/js/fisheye.js"></script>
+
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>Large Data and R</h1>
+    <h2>how to deal with large data in R with no memory errors and efficient code</h2>
+    <p>Miguel Vazquez-Prada, September 2013.<br/>Center for Epidemiology and Screening, University of Copenhagen.</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:#EDE0CF;">
+  <hgroup>
+    <h2>R</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><strong>R</strong> is a system for statistical computation and graphics. 
+It consists of a language plus a run-time environment with graphics, a debugger, access to certain system functions, and the ability to run programs stored in script files.</p>
+
+<p><strong>R</strong> was initially written by Ross Ihaka and Robert Gentleman at the Department of Statistics of the University of Auckland in Auckland,  New Zealand.  A large group of individuals has contributed to R by sending code and bug reports.
+Since mid-1997 there has been a core group (the &quot;R Core Team&quot;) who can modify the R source code archive.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Why R ??</h2>
+  </hgroup>
+  <article data-timings="">
+    <blockquote>
+<p><strong>R</strong> is dynamic, to say the least. 
+More precisely, it is organic, with new functionality and add-on packages appearing constantly. 
+And because of its open-source nature and free availability, 
+R is quickly becoming the software of choice for statistical analysis in a variety of fields.</p>
+</blockquote>
+
+<p><a href="http://cran.r-project.org/web/packages/HSAUR/vignettes/Ch_introduction_to_R.pdf" title="R intro">A Handbook of Statistical Analysis Using R</a></p>
+
+<p><img src="assets/img/R.png" alt="R"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Why R?</h2>
+  </hgroup>
+  <article data-timings="">
+    <ol class = "build incremental">
+<li>OPEN SOURCE </li>
+<li>it is used in an increasing number of research centers and media. </li>
+<li>with some patience, you can do almost ANYTHING with your data. </li>
+<li>is similar to other high performance languages, like C++ , python, etc. </li>
+<li>it is cross platform and can be extremely efficient. </li>
+<li>integration with other languages (C++, etc.).</li>
+<li>large amount of specific packages-</li>
+<li>great graphics capabilities.</li>
+<li>very dynamic users community</li>
+<li><strong>it is the FUTURE...</strong> </li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>SAS VS R</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th>SAS</th>
+<th>R</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Payed</td>
+<td>free</td>
+</tr>
+<tr>
+<td>Medium performance</td>
+<td>Variable performance</td>
+</tr>
+<tr>
+<td>No memory issues</td>
+<td>Possible memory issues</td>
+</tr>
+<tr>
+<td>Stable workflow</td>
+<td>Custom workflow</td>
+</tr>
+<tr>
+<td>Difficult to expand</td>
+<td>Expandable, full amount of packages</td>
+</tr>
+<tr>
+<td>Poor graphics</td>
+<td>Great graphics</td>
+</tr>
+<tr>
+<td>Fixed documentation</td>
+<td>Disperse, but very active community</td>
+</tr>
+<tr>
+<td><em>Recommended to:</em></td>
+<td><em>Recommended to:</em></td>
+</tr>
+<tr>
+<td>Linear, non-programmers</td>
+<td>non-linear, custom and graphics</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>MOTIVATION</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><strong>The &quot;approach&quot;:</strong> </p>
+
+<ul>
+<li>Science as an open and accessible social development. </li>
+<li>World-wide sharing and support</li>
+<li>Freedom to customize </li>
+</ul>
+
+<p><img src="assets/img/globals.jpg" alt="R"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>MOTIVATION 2</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><strong>R</strong> is an open source programming language that is widely used in statistical computations. 
+More and more researchers and Universities are using R as the main statistical analysis language. </p>
+
+<p><strong>R</strong> is one of the best options to use in statistical analysis.</p>
+
+<p>BUT, </p>
+
+<p><strong>R</strong> faces many problems while using Large Data Sets. 
+And that can make R a non-convenient language for large data analysis. </p>
+
+<p>Solving this problems will take R to other dimension : </p>
+
+<h3>EFFICIENT LARGE DATA ANALYSIS</h3>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="memory1" style="background:;">
+  <hgroup>
+    <h2>THE MEMORY PROBLEM</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><strong>R</strong> is using RAM memory to store computed, computing and temporal data. 
+RAM overflow errors are common when we use large data in R.</p>
+
+<p>There is not only the limitation of the RAM capacity, but also the limitation of contiguous free RAM blocks: To be able to store a vector in R, we need a contiguous free space in RAM memory for that vector.</p>
+
+<p>And sometimes, while having still some hundreds of megabytes of free memory, we do not have any <em>contiguous free block</em> bigger that a few megabytes. </p>
+
+<p>Then, any large vector will not be able to fit into memory and we will get an error.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <article data-timings="">
+    <p><img src="assets/img/ramf.png" alt="RAM" height="600" width="800" align="middle"> </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>MEMORY R EXAMPLE</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">pr &lt;- function(x){object.size(x) }
+xint &lt;- 0L; 
+N &lt;- 1e6
+x &lt;- rep(23L,N); m.int &lt;- pr(x)
+x &lt;- rep(0.23,N); m.float &lt;- pr(x)
+x &lt;- as.Date(&quot;2000-01-01&quot;) + 1:N; 
+m.date &lt;-   pr(x)
+x &lt;- as.factor(1:N); m.factor &lt;-  pr(x)
+x &lt;- as.factor(rep(23L,N)); m.factor.2 &lt;- pr(x) #  it depends on the content !!!
+x &lt;- as.character(1:N); m.char &lt;- pr(x)  
+x &lt;- as.character(rep(23L,N)); m.char2 &lt;- pr(x) # it depends on the content !!!!
+memos &lt;- c(m.int,m.float,m.date,m.char,m.factor)
+md &lt;- data.frame(class = c(&quot;integer&quot;,&quot;numeric&quot;, &quot;date&quot;,&quot;character&quot;, &quot;factor&quot;), size = round(memos/1e6,digits =1) )
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>MEMORY R EXAMPLE (2)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>So we have this sizes in Mb for vectors of 1 million item:</p>
+
+<pre><code class="r">md
+</code></pre>
+
+<pre><code>##       class size
+## 1   integer    4
+## 2   numeric    8
+## 3      date    8
+## 4 character   36
+## 5    factor   40
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>MEMORY R EXAMPLE (3)</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The problem arises when we try to load a vector of large size </p>
+
+<h4>(2e8 integer, which will be 20*3.8=762 Mb) :</h4>
+
+<pre><code class="r">N &lt;- 2e+08
+x &lt;- rep(0L, N)
+print(object.size(x), units = &quot;Mb&quot;)
+gc()
+</code></pre>
+
+<p>Getting the error: </p>
+
+<pre><code>Error: cannot allocate vector of size 762.9 Mb
+</code></pre>
+
+<p>We are unable to load a 762 Mb vector, having 4 Gb of RAM , because we do not have a contiguous free memory block. 
+We need a way to store efficiently data and temporal computation data into the hard drive, and load dinamically... </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>THE SPEED PROBLEM</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Dealing with large data needs efficient code to speed up computations. 
+Non efficient code can result in extremely slow processes,  that can last hours or days instead of seconds or minutes. </p>
+
+<p>Special care must be done to produce efficient code, using native R code or some packages and/or other languages.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>SOLVING ISSUES : MEMORY</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>To solve memory problems we need to write data into disk, instead of loading into RAM memory. </p>
+
+<p>The package <code>ff</code> and <code>ffbase</code> allow to do this and still do very efficient code. </p>
+
+<p>Some main functions of ffbase were <strong>modified or re-coded</strong> to allow more efficiency or avoid memory problems, 
+that still exist using the ffbase package. </p>
+
+<p>Some internal coding of the package was modified by the authors after we had some useful discussions with them. </p>
+
+<p>The result is that to solve memory problems we use ffbase + some new functions, that avoid almost all the possible memory problems in R, while still keeping efficient code. </p>
+
+<h2>FFBASE + CUSTOM FUNCTIONS --&gt;  NO MEMORY ERRORS</h2>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>SOLVING ISSUES : SPEED</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Large data --&gt; speeds factors of 10 , 100 , 1000 or more between efficient and non-efficient code.
+To accomplish a speed-optimized code, we have used 3 main procedures : </p>
+
+<ol class = "build incremental">
+<li><p><strong>Efficient R code</strong>. 
+Using vectorized functions, efficient built-in functions, etc. 
+This will make the code several orders of magnitude faster than other codes (see details in the tutorial files) </p></li>
+<li><p><strong>Use data.table</strong> package for &quot;group by&quot; and split analysis. 
+data.table is a very efficient package that allows to compute &quot;group by&quot;, splits, etc., 
+analysis in a very efficient way. 
+We use it   for almost any &quot;group by&quot; analysis and for other specific tasks. </p></li>
+<li><p><strong>Rcpp</strong>:
+C++ code in R. 
+C++ is one of the fastest languages that we can code in computers. The package &quot;Rcpp&quot; and &quot;inline&quot; , 
+allow to create C++ code in R in    an &quot;easy&quot; way. 
+For some tasks, Rcpp code is thousands times faster than R code. We have developed some Rcpp functions to work with large data. 
+We have also made some tutorials about how, when, and why use Rcpp into R code.</p></li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15">
+<hgroup>
+  
+</hgroup>
+<article class = 'flexbox vcenter'>
+<p>##</p>
+
+<h2>ffbase + efficient R +  data.table +</h2>
+
+<h2>Rcpp + custom functions</h2>
+
+<h2>=</h2>
+
+<h2>SPEED-OPTIMIZED CODE</h2>
+
+<p><img src="assets/img/dog.jpg" alt="RAM" height="200" width="300" align="middle"></p>
+
+</article>
+<!-- Presenter Notes -->
+</slide>
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>SOLVING THE PROBLEM : THE INTERNAL PROCESS</h2>
+  </hgroup>
+  <article data-timings="">
+    <h4>All those speed-efficient techniques are combined with ffbase to compute tasks into blocks that can fit into RAM memory, write the result in disk, and proceed with the next block of data loaded into RAM.  In this way, we obtain the benefits of speed,  avoiding memory problems.</h4>
+
+<p><img src="assets/img/ramff.png" alt="RAMFF" height="600" width="800" align="middle"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:#EDE0CF;">
+  <hgroup>
+    <h2>CHOOSING A COMPUTER TO RUN R</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Due to this memory problem in R, a good computer to work with R would be one with a good RAM memory, working in 64bits OS and having fast write/read hard disk capabilities. </p>
+
+<p>The ideal computer would be : </p>
+
+<ol>
+<li>&gt;= 16 GB RAM </li>
+<li>SD (solid state) hard disk</li>
+<li>64 bits Linux OS // 64bits Mac OSX<br></li>
+<li>Fast cpu, etc.</li>
+</ol>
+
+<h4>The work we present here is done while working in a <strong>Windows 32bits computer with 4gb RAM</strong>,  which is almost the &quot;worst&quot; computer we can get nowadays to work with R.</h4>
+
+<h4>Having this computer, we could work in a very efficient way with databases containing dozens of millions records and a few dozens of columns.</h4>
+
+<p>Using the proposed techniques and functions, <strong>any computer will be able to deal with large data in R</strong>. </p>
+
+<p>And this opens a new possibility for the use of R with large data, for example for <em>less rich countries or for the common desktop computers</em>. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>LARGE DATA EXAMPLE</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>We compute the same task following different methods and finding their computational duration. </p>
+
+<ol>
+<li><p>Task 1: 
+in a large database, label records whith<br>
+date_min &lt;= date &lt; date_max and diagnose == &quot;a&quot; or &quot;b&quot; or &quot;c&quot; as &quot;positive&quot; and others as &quot;negative&quot;. </p></li>
+<li><p>Task 2: 
+In a large database, for each ident, find the number of cases with diagnoses &quot;d&quot; , &quot;e&quot; or &quot;f&quot;. 
+If n == 0 label case as &quot;none&quot;, if 0&lt; n &lt;= 10 label = few , others: label = many. </p></li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>The database:</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The data (20 million rows) :: </p>
+
+<pre><code>df[1:3,]
+ident        date  diagnose region
+324958  1991-07-25       l    070
+1339198 1974-03-24       z    065
+553078  1978-01-06       s    065
+</code></pre>
+
+<p>Structure of the Data :: </p>
+
+<pre><code>str(df[1,])
+&#39;data.frame&#39;:  1 obs. of  4 variables:
+$ ident   : Factor w/ 1999919 levels &quot;1000&quot;,&quot;1001&quot;,..: 323942
+$ date    : Date, format: &quot;1991-07-25&quot;
+$ diagnose: Factor w/ 26 levels &quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;,..: 12
+$ region  : Factor w/ 18 levels &quot;000&quot;,&quot;013&quot;,&quot;014&quot;,..: 15
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>TASK 1</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Label records whith  date.min &lt;= date &lt; date.max and diagnose == &quot;a&quot; or &quot;b&quot; or &quot;c&quot; as &quot;positive&quot; and others as &quot;negative&quot;</p>
+
+<ul>
+<li>A. loop over the rows of the database. </li>
+<li>B. mapply </li>
+<li>C. vectorized function</li>
+<li>D. data.table</li>
+<li>E. Rcpp</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>Speed comparison data :</h2>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th>method</th>
+<th>time</th>
+<th>time.relative</th>
+<th>time.20e6</th>
+<th>label</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>loop rows</td>
+<td>65.2800</td>
+<td>7865</td>
+<td>13056.00</td>
+<td>3.62 hours</td>
+</tr>
+<tr>
+<td>mapply</td>
+<td>65.7000</td>
+<td>7916</td>
+<td>13140.00</td>
+<td>3.65 hours</td>
+</tr>
+<tr>
+<td>apply</td>
+<td>27.6400</td>
+<td>3330</td>
+<td>5528.00</td>
+<td>1.5 hours</td>
+</tr>
+<tr>
+<td>vectorized</td>
+<td>0.0600</td>
+<td>7</td>
+<td>12.00</td>
+<td>12 seconds</td>
+</tr>
+<tr>
+<td>data.table</td>
+<td>0.0500</td>
+<td>6</td>
+<td>10.00</td>
+<td>10 seconds</td>
+</tr>
+<tr>
+<td>Rcpp</td>
+<td>0.0083</td>
+<td>1</td>
+<td>1.66</td>
+<td>1.7 seconds</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>Graph the results ::</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">plot &lt;- ggplot(speed, aes(x = method, y = time_relative, fill = method, group = 1))
+plot &lt;- plot + geom_bar(stat = &quot;identity&quot;) + xlab(&quot;computing methods&quot;) + ylab(&quot;relative computing time&quot;) + 
+    ggtitle(&quot;Relative computing times for different methods in R  \n over a 20 million row data frame &quot;)
+
+plot2 &lt;- plot + geom_text(data = speed, aes(x = method, y = time_relative, label = time_20e6), 
+    vjust = -0.5, size = 4) + theme(plot.title = element_text(size = 16, vjust = 1), 
+    legend.position = c(0.82, 0.67), axis.title.x = element_text(vjust = -1, 
+        size = rel(1.2)), axis.title.y = element_text(angle = 90, vjust = 0, 
+        size = rel(1.2)), plot.margin = unit(c(1, 1, 1, 1), &quot;lines&quot;))
+
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>Speed results</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/img/speed.jpg" alt="Speed" height="600" width="800" align="middle"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>TASK 2</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>In a large database, for each ident, find the number of cases with diagnoses &quot;d&quot; , &quot;e&quot; or &quot;f&quot;. </p>
+
+<p>If n == 0 label case as &quot;none&quot;, if 0&lt; n &lt;= 6 label = few , others: label = many. </p>
+
+<p>As a general rule, timings for group_by computations will depend on the number of levels for the variable grouped.</p>
+
+<p>For same number of levels, the fact that data is ordered or not is not very important for some methods. </p>
+
+<p>For other methods, the ordering can improve the speed (as for ffdfdply for example).</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h2>Speed comparison data :</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>(2 million rows)</p>
+
+<table><thead>
+<tr>
+<th>method</th>
+<th>time.relative</th>
+<th>label 2e6</th>
+<th>label 20e6</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>tapply</td>
+<td>3992</td>
+<td>27 minutes</td>
+<td>4.1 hours</td>
+</tr>
+<tr>
+<td>aggregate</td>
+<td>4212</td>
+<td>26 minutes</td>
+<td>4.3 hours</td>
+</tr>
+<tr>
+<td>data.table</td>
+<td>20</td>
+<td>7 seconds</td>
+<td>1.24 minutes</td>
+</tr>
+<tr>
+<td>sqldf</td>
+<td>17</td>
+<td>6.3 seconds</td>
+<td>1.05 minutes</td>
+</tr>
+<tr>
+<td>Rcpp</td>
+<td>1</td>
+<td>0.37 seconds</td>
+<td>3.7 seconds</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h2>Speed results</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><img src="assets/img/speed2.jpg" alt="Speed" height="600" width="800" align="middle"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h2>DOCUMENTATION : REPIDEMIOLOGY WEBSITE</h2>
+  </hgroup>
+  <article data-timings="">
+    <p><a href="http://repidemiology.wordpress.com/">http://repidemiology.wordpress.com/</a> , contains tutorials, videos and code about R. 
+It is meant to be a site where beginners and advanced can learn and work with large data. </p>
+
+<p><img src="assets/img/press.jpg" alt="Speed" height="600" width="800" align="middle"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h2>SOLVING THE PROBLEM : NEW FUNCTIONS</h2>
+  </hgroup>
+  <article data-timings="">
+    <h2>( SUMMARY LIST)</h2>
+
+<ul>
+<li>order_ffdf (data=,order_cols=,splits=,verbose=)</li>
+<li>subset_ffdf (data=,condition_cols=,condition=,splits=,verbose=)</li>
+<li>cbind_ffdf (x=,y=)</li>
+<li>append_<em>ffdf (x=,y</em>=,chunk_s=)</li>
+<li>merge_by (x=,y=,keycols=,split_name=,chk=)</li>
+<li>index_ffdf (x=,idx=,verbose=)</li>
+<li>index_ffdf_split (x=,idx=,nsplits=,verbose=)</li>
+<li>split_<em>apply_cpp (input_data=,split_vector=,chk_size</em>=,fu=)</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>SOME NEW UTILITIES</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>redir_ffdf (ffdf=,newdir= ) </li>
+<li>redir_ffdf_ffdfsave (ff=,newdir=)<br></li>
+<li>is_ordered_by_row_col (data=,col_name=) </li>
+<li>quote_names()<br></li>
+<li>qn()<br></li>
+<li>lagpad (x=)</li>
+<li>asDate (x=)</li>
+<li>txt.perc (x=,dec=)</li>
+<li>fill.vec (x=,fill=&quot;*&quot;)</li>
+<li>fill.vec.all.same (x=,fill=&quot;*&quot;) </li>
+<li>fill.data.frame (x=,fill.char=&quot;*&quot;,make.factors=FALSE)</li>
+<li>fill.data.frame.all.same (df,&quot;_&quot;)<br></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>APPENDIX</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>This documents was made using ONLY R. 
+WIth packages <code>shiny</code> and <code>slidify</code></p>
+
+<p>This is an example of the code used : </p>
+
+<pre><code>&gt;1. OPEN SOURCE 
+&gt;2. it is used in an increasing number of research centers and media. 
+&gt;3. with some patience, you can do almost ANYTHING with your data. 
+&gt;4. is similar to other high performance languages, like C++ , python, etc. 
+
+
+![R](assets/img/globals.jpg)
+
+
+
+```r
+ pr &lt;- function(x){object.size(x) }
+xint &lt;- 0L;
+```
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-31" style="background:;">
+  <hgroup>
+    <h2>APPENDIX 2 : INTERACTIVITY</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Counts of diagnoses = a,b,c for different regions. </p>
+
+<div id='chart1' class='rChart nvd3'></div>
+
+<script type='text/javascript'>
+ $(document).ready(function(){
+      drawchart1()
+    });
+    function drawchart1(){  
+      var opts = {
+ "dom": "chart1",
+"width":    800,
+"height":    400,
+"x": "diagnoseklasse",
+"y": "Freq",
+"group": "screening_region2007",
+"type": "multiBarChart",
+"id": "chart1" 
+},
+        data = [
+ {
+ "screening_region2007": "X",
+"diagnoseklasse": "X",
+"Freq": 408437 
+},
+{
+ "screening_region2007": "X",
+"diagnoseklasse": "c",
+"Freq": 362670 
+},
+{
+ "screening_region2007": "X",
+"diagnoseklasse": "d",
+"Freq": 15450 
+},
+{
+ "screening_region2007": "X",
+"diagnoseklasse": "a",
+"Freq": 6588 
+},
+{
+ "screening_region2007": "C",
+"diagnoseklasse": "X",
+"Freq": 23277 
+},
+{
+ "screening_region2007": "A",
+"diagnoseklasse": "X",
+"Freq": 36215 
+},
+{
+ "screening_region2007": "B",
+"diagnoseklasse": "X",
+"Freq": 15856 
+},
+{
+ "screening_region2007": "E",
+"diagnoseklasse": "X",
+"Freq": 10961 
+},
+{
+ "screening_region2007": "D",
+"diagnoseklasse": "X",
+"Freq": 23849 
+},
+{
+ "screening_region2007": "X",
+"diagnoseklasse": "b",
+"Freq": 6038 
+},
+{
+ "screening_region2007": "C",
+"diagnoseklasse": "c",
+"Freq": 3202 
+},
+{
+ "screening_region2007": "D",
+"diagnoseklasse": "d",
+"Freq": 177 
+},
+{
+ "screening_region2007": "E",
+"diagnoseklasse": "c",
+"Freq": 1685 
+},
+{
+ "screening_region2007": "A",
+"diagnoseklasse": "c",
+"Freq": 6103 
+},
+{
+ "screening_region2007": "D",
+"diagnoseklasse": "c",
+"Freq": 3330 
+},
+{
+ "screening_region2007": "B",
+"diagnoseklasse": "d",
+"Freq": 146 
+},
+{
+ "screening_region2007": "B",
+"diagnoseklasse": "c",
+"Freq": 2004 
+},
+{
+ "screening_region2007": "D",
+"diagnoseklasse": "a",
+"Freq": 81 
+},
+{
+ "screening_region2007": "E",
+"diagnoseklasse": "d",
+"Freq": 32 
+},
+{
+ "screening_region2007": "C",
+"diagnoseklasse": "a",
+"Freq": 61 
+},
+{
+ "screening_region2007": "A",
+"diagnoseklasse": "d",
+"Freq": 214 
+},
+{
+ "screening_region2007": "E",
+"diagnoseklasse": "a",
+"Freq": 36 
+},
+{
+ "screening_region2007": "C",
+"diagnoseklasse": "d",
+"Freq": 103 
+},
+{
+ "screening_region2007": "A",
+"diagnoseklasse": "a",
+"Freq": 122 
+},
+{
+ "screening_region2007": "D",
+"diagnoseklasse": "b",
+"Freq": 83 
+},
+{
+ "screening_region2007": "B",
+"diagnoseklasse": "a",
+"Freq": 43 
+},
+{
+ "screening_region2007": "C",
+"diagnoseklasse": "b",
+"Freq": 78 
+},
+{
+ "screening_region2007": "E",
+"diagnoseklasse": "b",
+"Freq": 37 
+},
+{
+ "screening_region2007": "A",
+"diagnoseklasse": "b",
+"Freq": 50 
+},
+{
+ "screening_region2007": "B",
+"diagnoseklasse": "b",
+"Freq": 17 
+} 
+]
+  
+      var data = d3.nest()
+        .key(function(d){
+          return opts.group === undefined ? 'main' : d[opts.group]
+        })
+        .entries(data)
+      
+      nv.addGraph(function() {
+        var chart = nv.models[opts.type]()
+          .x(function(d) { return d[opts.x] })
+          .y(function(d) { return d[opts.y] })
+          .width(opts.width)
+          .height(opts.height)
+         
+        
+          
+        
+
+        
+        
+        
+      
+       d3.select("#" + opts.id)
+        .append('svg')
+        .datum(data)
+        .transition().duration(500)
+        .call(chart);
+
+       nv.utils.windowResize(chart.update);
+       return chart;
+      });
+    };
+</script>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='R'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Why R ??'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='Why R?'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='SAS VS R'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='MOTIVATION'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='MOTIVATION 2'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='THE MEMORY PROBLEM'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title=''>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='MEMORY R EXAMPLE'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='MEMORY R EXAMPLE (2)'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='MEMORY R EXAMPLE (3)'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='THE SPEED PROBLEM'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='SOLVING ISSUES : MEMORY'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='SOLVING ISSUES : SPEED'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title=''>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='SOLVING THE PROBLEM : THE INTERNAL PROCESS'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='CHOOSING A COMPUTER TO RUN R'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='LARGE DATA EXAMPLE'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='The database:'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='TASK 1'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='Speed comparison data :'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='Graph the results ::'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='Speed results'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='TASK 2'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='Speed comparison data :'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='Speed results'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='DOCUMENTATION : REPIDEMIOLOGY WEBSITE'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='SOLVING THE PROBLEM : NEW FUNCTIONS'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='SOME NEW UTILITIES'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='APPENDIX'>
+         30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='APPENDIX 2 : INTERACTIVITY'>
+         31
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  <script src="libraries/widgets/bootstrap/js/bootstrap.min.js"></script>
+<script src="libraries/widgets/bootstrap/js/bootbox.min.js"></script>
+<script src="libraries/widgets/interactive/js/ace/js/ace.js"></script>
+<script src="libraries/widgets/interactive/js/interactive.js"></script>
+
+  <script>  
+  $(function (){ 
+    $("#example").popover(); 
+    $("[rel='tooltip']").tooltip(); 
+  });  
+  </script>  
+  <script src="shared/shiny.js" type="text/javascript"></script>
+  <script src="shared/slider/js/jquery.slider.min.js"></script>
+  <script src="shared/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="shared/slider/css/jquery.slider.min.css"></link>
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
